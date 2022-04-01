@@ -11,27 +11,32 @@ class Quiz {
 let question1 = new Quiz(0,"¿Quién pinto 'La Gioconda'? <br> [ 0 ] Leonardo Da Vinci <br> [ 1 ] Rafael Sanzio <br> [ 2 ] Donatello <br> [ 3 ]" ,0);
 let question2 = new Quiz(0,"",3);
 let question3 = new Quiz(0,"",2);
-let question4 = new Quiz(0,"",4);
+let question4 = new Quiz(0,"",1);
+let questionsArray = new Array(3);
+questionsArray[0] = question1;
+questionsArray[1] = question2;
+questionsArray[2] = question3;
+questionsArray[3] = question4;
 
-function gameManager(){
+function gameManager(questionsArray){
     let score = 0;
-    let questionsArray[question1,];
-
+    let win = true;
     do{
-        let awnser = Number(prompt("Ingrese numero de respuesta numerica"));
-    }while(isNaN(awnser) && awnser < 3)
-
-
-
-
-    if(awnser == questionsArray[i].correctNumber)
-    {
-
-        score++;
-    }else
-    {
-        gameOver(null,score);
-    }
+        let random = Math.floor(Math.random() * questionsArray.length);
+        document.write(questionsArray[random].questions);
+        do{
+            let awnser = Number(prompt("Ingrese numero de respuesta numerica"));
+        }while(isNaN(awnser) && awnser < 3)
+        if(awnser == questionsArray[random].correctNumber)
+        {
+            win = true
+            score++;
+        }else
+        {
+            win = false;
+            gameOver(null,score);
+        }
+    }while(win == true);
 }
 
 //El best score lo voy a agregar cuando sepa guardar cosas en json;
