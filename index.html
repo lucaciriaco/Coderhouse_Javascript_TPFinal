@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coderhouse trabajo practico final</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="./css/style.css" rel="stylesheet">
 </head>
+
 <body>
-    
+    <div class="container">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col" id="score">
+                    Puntaje:
+                </div>
+                <div class="col-6">
+
+                </div>
+                <div class="col" id="topScore">
+                    Mejor puntaje:
+                </div>
+            </div>
+        </div>
+
+        <div class="container py-5 text-center" id="question">
+            <h2>
+                Question
+            </h2>
+        </div>
+        <div class="d-grid gap-4 col-6 mx-auto awnsers">
+            <button class="btn btn-primary" type="button" id="answer1">Awnser1</button>
+            <button class="btn btn-primary" type="button" id="answer2">Awnser2</button>
+            <button class="btn btn-primary" type="button" id="answer3">Awnser3</button>
+            <button class="btn btn-primary" type="button" id="answer4">Awnser4</button>
+        </div>
+    </div>
     <script src="./js/app.js"></script>
-    <script>gameManager();</script>
 </body>
+
 </html>
