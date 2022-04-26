@@ -1,0 +1,46 @@
+[
+    {
+        "type": "0",
+        "question": "Pregunta 1",
+        "answer": [
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        "correctNumber": "1"
+    },
+    {
+        "type": "0",
+        "question": "Pregunta 2",
+        "answer": [
+            "2",
+            "3",
+            "4",
+            "1"
+        ],
+        "correctNumber": "2"
+    },
+    {
+        "type": "0",
+        "question": "Pregunta 3",
+        "answer": [
+            "3",
+            "4",
+            "1",
+            "2"
+        ],
+        "correctNumber": "3"
+    },
+    {
+        "type": "0",
+        "question": "Pregunta 4",
+        "answer": [
+            "4",
+            "1",
+            "2",
+            "3"
+        ],
+        "correctNumber": "4"
+    }
+]
