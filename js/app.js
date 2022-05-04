@@ -1,87 +1,82 @@
-class Quiz {
-    constructor(type,question,answer,correctNumber){
-        //El tipo seria diferente categoria de preguntas que voy a agregar mas tarde
-        this.type = type;
-        this.question = question;
-        this.answer = answer;
-        this.correctNumber = correctNumber;
-    }
-}
-
-// Variable global que va a guardar la respuesta de los botones.
-var answer = null;
-let score = 0;
-let win = true;
-let highScore =loadHighScore();
-const quizJson='[{"type":"0","question":"Pregunta 1","answer":["1","2","3","4"],"correctNumber":"1"},{"type":"0","question":"Pregunta 2","answer":["2","3","4","1"],"correctNumber":"2"},{"type":"0","question":"Pregunta 3","answer":["3","4","1","2"],"correctNumber":"3"},{"type":"0","question":"Pregunta 4","answer":["4","1","2","3"],"correctNumber":"4"}]'
-var quizArray = JSON.parse(quizJson);
-let actualQuiz = {};
 // Guardo los elementos del dom.
-let question = document.getElementById("question");
-let startBtn = document.getElementById("startBtn");
-let btns = document.getElementsByClassName("answer");
 let topScoreard = document.getElementById("topScore");
 let scoreBoard = document.getElementById("score");
+let btns = document.getElementsByClassName("answer");
+let startBtn = document.getElementById("startBtn");
+let question = document.getElementById("question");
 
-//Le agrego el evento a los botones
-btns[0].addEventListener('click',() =>{answer = 1;gameManager()})
-btns[1].addEventListener('click',() =>{answer = 2;gameManager()})
-btns[2].addEventListener('click',() =>{answer = 3;gameManager()})
-btns[3].addEventListener('click',() =>{answer = 4;gameManager()})
+//Variables globales
+let score = 0;
+let win;
+let highScore =loadHighScore();
+let answer;
+let msj;
+
+//Antes que nada ocultamos los botones
+hideButtons();
+//Agrego los eventos a los botones pasando por parametro el indice del boton
+btns[0].addEventListener('click',() =>{gameManager(0)})
+btns[1].addEventListener('click',() =>{gameManager(1)})
+btns[2].addEventListener('click',() =>{gameManager(2)})
+btns[3].addEventListener('click',() =>{gameManager(3)})
 startBtn.addEventListener('click',() => startGame())
-startGame()
 
+//Se ejecuta con el boton startbtn reinicia las variables y actualiza el puntaje
 function startGame(){
-    console.log("start Game")
-    win=true;
     score=0;
+    scoreBoard.innerHTML= "Puntaje: " + score;
     topScoreard.innerText=loadHighScore();
     showButtons();
     loadQuiz();
-    
 }
 
+//Carga completamente al azar una pregunta desde la API y la muestra en el DOM
 function loadQuiz(){
-    if(win==true)
-    {
-        let random = loadRandomQuiz();
-        actualQuiz = quizArray[random];
-        question.innerText = actualQuiz.question;
-        btns[0].innerText=actualQuiz.answer[0]
-        btns[1].innerText=actualQuiz.answer[1]
-        btns[2].innerText=actualQuiz.answer[2]
-        btns[3].innerText=actualQuiz.answer[3]
-    }
-    
+    fetch('https://opentdb.com/api.php?amount=1')
+        .then((response) => response.json())
+        .then((data) => {
+            const quiz=data.results[0]
+            question.innerText=quiz.question;
+            const random = Math.floor(Math.random() * 4);
+            let incorrectIndex=0;
+            for (let index = 0; index < 4; index++) {
+                if(index==random){
+                    console.log(quiz.correct_answer)
+                    btns[index].innerText = quiz.correct_answer;
+                    answer=index;
+                    msj=quiz.correct_answer;
+                }
+                else{
+                    btns[index].innerText = quiz.incorrect_answers[incorrectIndex];
+                    incorrectIndex++;
+                }
+                
+            }
+        })
+        showButtons();
 }
 
-function gameManager(){
-    if(win==true)
+//Comprueba si la respuesta es correcta, si lo es aumenta el puntaje y carga una nueva pregunta. Si no lo es reinicia el juego y muestra en una alerta la respuesta correcta
+function gameManager(value){
+    if(value==answer)
     {
-        if(answer == actualQuiz.correctNumber){   
-            win = true
-            score++;
-            scoreBoard.innerHTML= "Puntaje: " + score;
-            if(score>highScore){
-                saveHighScore(score);
-            }
+        score++;
+        scoreBoard.innerHTML= "Puntaje: " + score;
+        if(score>highScore){
+            saveHighScore(score);
         }
-        else{
-            win = false;
-            hideButtons();
-            topScoreard.innerText=loadHighScore();
-        }
+        
         loadQuiz();
     }
+    else{
+        gameOver(msj);
+        hideButtons();
+        topScoreard.innerText=loadHighScore();
+    } 
 }
 
 
-
-function loadRandomQuiz(){
-    let randomQuizObject =Math.floor(Math.random() * quizArray.length);
-    return randomQuizObject;
-}
-
+//Carga el puntaje mas alto almacenado desde localstorage de no existir lo inicia en 0
 function loadHighScore(){
     let highScore = localStorage.getItem("highScore");
     if(highScore==null){
@@ -90,36 +85,28 @@ function loadHighScore(){
     return highScore;
 }
 
+//Guarda el puntaje mas alto en localstorage
 function saveHighScore(newHighScore){
     localStorage.setItem("highScore",newHighScore);
 }
 
-function showAnswers(btns,quiz){
-    for(i = 0; i < btns.length ; i++){
-        btns[i].innerText = quiz.answer[i];
-    }
-}
-
-function loadQuizJson(){
-    //arreglar luego
-}
-
+//Muestra los botones con las respuestas y oculta el boton de empezar el juego
 function showButtons(){
     for(i = 0; i < btns.length; i++){
         btns[i].hidden = false;
     }
-
     startBtn.hidden=true;
 }
 
+//Muestra el boton de empezar el juego y oculta los botones de las respuestas
 function hideButtons(){
     for(i = 0; i < btns.length; i++){
         btns[i].hidden = true;
     }
-
     startBtn.hidden=false;
 }
 
-function gameOver(){
-
+//Crea una alerta con la libreria SweetAlertJS
+function gameOver(correct_answer){
+    Swal.fire('The correct answer was: '+correct_answer);
 }
