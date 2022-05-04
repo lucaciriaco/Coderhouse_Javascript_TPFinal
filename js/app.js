@@ -65,11 +65,11 @@ function gameManager(value){
         if(score>highScore){
             saveHighScore(score);
         }
-        
+        gameOver('Correct!','success');
         loadQuiz();
     }
     else{
-        gameOver(msj);
+        gameOver(msj,'error');
         hideButtons();
         topScoreard.innerText=loadHighScore();
     } 
@@ -107,6 +107,9 @@ function hideButtons(){
 }
 
 //Crea una alerta con la libreria SweetAlertJS
-function gameOver(correct_answer){
-    Swal.fire('The correct answer was: '+correct_answer);
+function gameOver(correct_answer,icon){
+    Swal.fire({
+        text: 'The correct answer was: '+correct_answer,
+        icon:icon
+    });
 }
